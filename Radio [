@@ -1,0 +1,17 @@
+[33mcommit 12d0c95c38567e2a2626aab72c99917b4d622ddf[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Tomas Marsili <tomasmarsili.contacto@gmail.com>
+Date:   Wed Jun 24 22:46:06 2020 -0300
+
+    soft deleting implemented
+
+[33mcommit 5d7f0945e4c8aef26e304dfe363db9dc8becd772[m
+Author: Tomas Marsili <tomasmarsili.contacto@gmail.com>
+Date:   Wed Jun 24 19:27:20 2020 -0300
+
+    buyer and seller global scope added
+
+[33mcommit e0a331849270019f53bae8a039a90384c09206ba[m
+Author: Tomas Marsili <tomasmarsili.contacto@gmail.com>
+Date:   Sun Jun 14 19:58:35 2020 -0300
+
+    we configured exceptions handler
