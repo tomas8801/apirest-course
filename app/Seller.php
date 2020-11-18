@@ -2,12 +2,16 @@
 
 namespace App;
 
-use App\Scopes\SellerScope;
 use App\Product;
+use App\Scopes\SellerScope;
+use App\Transformers\SellerTransformer;
 
 class Seller extends User
 {
 
+    public $transformer = SellerTransformer::class;
+
+    # el metodo boot normalmente se utiliza para construir e inicializar el modelo
     protected static function boot()
     {
         parent::boot();

@@ -19,6 +19,7 @@ class SignatureMiddleware
     {
         $response = $next($request);
 
+        # Seteamos una nueva cabecera con el nombre de nuestra aplicacion
         $response->headers->set($header, config('app.name'));
 
         return $response;
