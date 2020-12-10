@@ -63,10 +63,12 @@ class Handler extends ExceptionHandler
     /** Aca se menejan las excepciones y errores de todo tipo */
     public function render($request, Throwable $exception)
     {
+        # Esta excepcion se ejecuta si hay algun error en las validaciones
         if($exception instanceof ValidationException){
             return $this->convertValidationExceptionToResponse($exception, $request);
         }
 
+        # Esta excepcion se ejecuta cuando la instancia de un modelo no es encontrada
         if($exception instanceof ModelNotFoundException){
             $model = strtolower(class_basename($exception->getModel()));
             return $this->errorResponse("No existe ninguna instancia de {$model} con el id especificado", 404);
