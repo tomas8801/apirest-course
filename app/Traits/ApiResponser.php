@@ -44,7 +44,7 @@ trait ApiResponser
         $collection = $this->cacheResponse($collection);
 
 
-        return $this->successResponse($collection, 200);
+        return $this->successResponse(new Collection(['data' => $collection]), $code);
     }
 
     # Este metodo mostrará una instancia de un modelo especifico.
