@@ -8,14 +8,18 @@ use App\Mail\UserMailChanged;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ApiController;
 use App\Mail\UserCreated;
+use App\Transformers\UserTransformer;
 
 class UserController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->middleware('transform.input:' . UserTransformer::class)->only(['store', 'update']);
+    }
+
     public function index()
     {
         $users = User::all();
@@ -23,12 +27,7 @@ class UserController extends ApiController
         return $this->showAll($users);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         #creamos reglas de validacion
@@ -53,12 +52,7 @@ class UserController extends ApiController
         return $this->showOne($user, 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(User $user)
     {
         return $this->showOne($user);
@@ -66,13 +60,6 @@ class UserController extends ApiController
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, User $user)
     {
         #creamos reglas de validacion
@@ -113,12 +100,7 @@ class UserController extends ApiController
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(User $user)
     {
         $user->delete();
@@ -126,6 +108,7 @@ class UserController extends ApiController
         return $this->showOne($user);
 
     }
+
 
     public function verify($token)
     {
@@ -137,6 +120,7 @@ class UserController extends ApiController
 
         return $this->showMessage('El usuario ha sido verificado');
     }
+
 
     public function resend(User $user)
     {

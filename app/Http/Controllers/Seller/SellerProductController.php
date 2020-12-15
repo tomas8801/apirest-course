@@ -8,16 +8,21 @@ use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Storage;
+use App\Transformers\ProductTransformer;
 use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SellerProductController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->middleware('transform.input:' . ProductTransformer::class)->only(['store', 'update']);
+    }
+
+
     public function index(Seller $seller)
     {
         $products = $seller->products;
@@ -25,13 +30,6 @@ class SellerProductController extends ApiController
     }
 
 
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request, User $seller)
     {
         $rules = [
@@ -56,13 +54,6 @@ class SellerProductController extends ApiController
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Seller  $seller
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Seller $seller, Product $product)
     {
         $rules = [
@@ -104,12 +95,7 @@ class SellerProductController extends ApiController
         return $this->showOne($product);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Seller  $seller
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Seller $seller, Product $product)
     {
         $this->verificarVendedor($seller, $product);
