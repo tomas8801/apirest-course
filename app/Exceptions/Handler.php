@@ -10,6 +10,7 @@ use Illuminate\Database\QueryException;
 use Throwable;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -50,15 +51,6 @@ class Handler extends ExceptionHandler
         parent::report($exception);
     }
 
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Throwable
-     */
 
     /** Aca se menejan las excepciones y errores de todo tipo */
     public function render($request, Throwable $exception)
@@ -102,6 +94,10 @@ class Handler extends ExceptionHandler
             }
         }
 
+        if($exception instanceof TokenMismatchException){
+            return redirect()->back()->withInput($request->input());
+        }
+
         if(config('app.debug')){
             return parent::render($request, $exception);
         }
@@ -110,28 +106,34 @@ class Handler extends ExceptionHandler
 
     }
 
-        /**
-     * Create a response object from the given validation exception.
-     *
-     * @param  \Illuminate\Validation\ValidationException  $e
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     protected function convertValidationExceptionToResponse(ValidationException $e, $request)
     {
         $errors = $e->validator->errors()->getMessages();
+
+        if($this->isFrontend($request)) {
+            return $request->ajax() ? response()->json($errors, 422) : redirect()
+                ->back()
+                ->withInput($request->input())
+                ->withErrors($errors);
+        }
+
         return $this->errorResponse($errors, 422);
     }
 
-        /**
-     * Convert an authentication exception into a response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
+        if($this->isFrontend($request)) {
+            return redirect()->guest('login');
+        }
+
         return $this->errorResponse('No autenticado.', 401);
+    }
+
+    # Este metodo verificará si una peticion viene del front end.
+    # Retornara V o F en caso de que un cliente este solicitando una respuesta HTML y si uno de los middlewares utilizados
+    # en la ruta de esta peticion es WEB.
+    private function isFrontend($request)
+    {
+        return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
     }
 }
