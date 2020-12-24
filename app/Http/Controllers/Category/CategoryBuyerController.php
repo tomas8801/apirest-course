@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CategoryBuyerController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index(Category $category)
     {
         $buyers = $category->products()->whereHas('transactions')->with('transactions.buyer')->get()->pluck('transactions')
@@ -25,15 +26,6 @@ class CategoryBuyerController extends ApiController
         return $this->showAll(new Collection($buyers));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Category $category)
-    {
-        //
-    }
+
 
 }

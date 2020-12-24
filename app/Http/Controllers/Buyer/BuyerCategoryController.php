@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class BuyerCategoryController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index(Buyer $buyer)
     {
         $categories = $buyer->transactions()->with('product.categories')
@@ -25,15 +26,5 @@ class BuyerCategoryController extends ApiController
         return $this->showAll(new Collection($categories));
     }
 
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Buyer  $buyer
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Buyer $buyer)
-    {
-    }
 
 }

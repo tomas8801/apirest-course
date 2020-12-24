@@ -8,11 +8,12 @@ use App\Http\Controllers\ApiController;
 
 class BuyerController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index()
     {
         $buyers = Buyer::has('transactions')->get();
@@ -20,13 +21,6 @@ class BuyerController extends ApiController
         return $this->showAll($buyers);
     }
 
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(Buyer $buyer)
     {
         # $buyer = Buyer::has('transactions')->findOrFail($id);

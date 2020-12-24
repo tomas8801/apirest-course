@@ -11,11 +11,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class BuyerSellerController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index(Buyer $buyer)
     {
         # traemos las transacciones de un comprador junto a la lista de productos y sus vendedores
@@ -29,18 +30,6 @@ class BuyerSellerController extends ApiController
             ->values();
 
         return $this->showAll(new Collection($sellers));
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Buyer  $buyer
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Buyer $buyer)
-    {
-        //
     }
 
 

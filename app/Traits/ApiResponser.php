@@ -40,7 +40,7 @@ trait ApiResponser
         $collection = $this->paginateData($collection);
         # Finalmente la transformamos
         $collection = $this->transformData($collection, $transformer);
-        # Guardamos en caché ele st
+        # Guardamos en caché la respuesta
         $collection = $this->cacheResponse($collection);
 
 

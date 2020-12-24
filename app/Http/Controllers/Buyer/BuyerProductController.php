@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\Collection;
 class BuyerProductController extends ApiController
 {
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index(Buyer $buyer)
     {
         $products = $buyer->transactions()->with('product')->get()->pluck('product');
